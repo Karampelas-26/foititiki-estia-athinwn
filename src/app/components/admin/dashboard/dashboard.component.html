@@ -1,0 +1,40 @@
+<div class="container mt-5 pt-5 w-auto">
+
+  <!-- Search area -->
+  <!-- <div class="input-group">
+    <input type="text" class="form-control" placeholder="Search" >
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Options</button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="#">Student id</a></li>
+      <li><a class="dropdown-item" href="#">Room</a></li>
+      <li><a class="dropdown-item" href="#">AM</a></li>
+      <li><a class="dropdown-item" href="#">Last name</a></li>
+      <li><a class="dropdown-item" href="#">First name</a></li>
+      <li><a class="dropdown-item" href="#">University</a></li>
+      <li><a class="dropdown-item" href="#">Date Registration University</a></li>
+      <li><a class="dropdown-item" href="#">Date Registration Dorm</a></li>
+      <li><a class="dropdown-item" href="#">Phone</a></li>
+      <li><a class="dropdown-item" href="#">Email</a></li>
+      <li><button type="button" class="dropdown-item btn btn-outl">Email</button></li>
+    </ul>
+    <button class="btn btn-primary" type="button" id="search-btn">
+      <i class="bi bi-search"></i>
+    </button>
+  </div> -->
+
+  <div class="input-group">
+    <input type="text" class="form-control w-75" placeholder="Search" >
+    <select class="form-select form-select-sm w-auto">
+      <option *ngFor="let option of optionsSerach" [value]="option.value">{{option.viewValue}} </option>
+    </select>
+    <button class="btn btn-primary" type="button" id="search-btn">
+      <i class="bi bi-search"></i>
+    </button>
+  </div>
+
+</div>
+
+
+<p class="m-5 p-5 w-auto">Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam inventore modi adipisci sit sunt ab qui excepturi necessitatibus! Nihil doloribus commodi nesciunt maxime, itaque dicta voluptatibus. Doloribus maiores provident harum.</p>
+
+
