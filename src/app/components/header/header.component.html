@@ -1,6 +1,17 @@
 <nav class="navbar navbar-ligth bg-light">
   <div class="container-fluid">
     <a href="" class="navbar-brand m-2">FEA</a>
+
+    <div class="container d-flex justify-content-end m-0 align-items-center">
+      <app-admin-header *ngIf="user == 'ROLE_ADMIN'">
+      </app-admin-header>
+
+      <app-student-header *ngIf="userR == 'ROLE_ADMIN'">
+      </app-student-header>
+
+      <button type="button" class="btn btn-secondary h-50 btn-sm" (click)="onLogOut()">Log out</button>
+
+    </div>
   </div>
 </nav>
 

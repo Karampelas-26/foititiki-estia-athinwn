@@ -1,40 +1,116 @@
-<div class="container mt-5 pt-5 w-auto">
 
-  <!-- Search area -->
-  <!-- <div class="input-group">
-    <input type="text" class="form-control" placeholder="Search" >
-    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Options</button>
-    <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="#">Student id</a></li>
-      <li><a class="dropdown-item" href="#">Room</a></li>
-      <li><a class="dropdown-item" href="#">AM</a></li>
-      <li><a class="dropdown-item" href="#">Last name</a></li>
-      <li><a class="dropdown-item" href="#">First name</a></li>
-      <li><a class="dropdown-item" href="#">University</a></li>
-      <li><a class="dropdown-item" href="#">Date Registration University</a></li>
-      <li><a class="dropdown-item" href="#">Date Registration Dorm</a></li>
-      <li><a class="dropdown-item" href="#">Phone</a></li>
-      <li><a class="dropdown-item" href="#">Email</a></li>
-      <li><button type="button" class="dropdown-item btn btn-outl">Email</button></li>
-    </ul>
-    <button class="btn btn-primary" type="button" id="search-btn">
-      <i class="bi bi-search"></i>
-    </button>
-  </div> -->
-
-  <div class="input-group">
-    <input type="text" class="form-control w-75" placeholder="Search" >
-    <select class="form-select form-select-sm w-auto">
-      <option *ngFor="let option of optionsSerach" [value]="option.value">{{option.viewValue}} </option>
-    </select>
-    <button class="btn btn-primary" type="button" id="search-btn">
-      <i class="bi bi-search"></i>
-    </button>
-  </div>
-
+<div class="m-5">
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
+    <thead>
+      <tr>
+        <th class="col">Room</th>
+        <th class="col">Last Name</th>
+        <th class="col">First Name</th>
+        <th class="col">AM</th>
+        <th class="col">University</th>
+        <th class="col">Email</th>
+        <th class="col">Phone</th>
+        <th class="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of students">
+        <td scope="row">{{student.room}}</td>
+        <td>{{student.lastname}}</td>
+        <td>{{student.firstname}}</td>
+        <td>{{student.am}}</td>
+        <td>{{student.university}}</td>
+        <td>{{student.email}}</td>
+        <td>{{student.phone}}</td>
+        <!-- <td><button type="button" class="btn btn-outline-secondary" (click)="studentProfile(student)"><i class="bi bi-three-dots-vertical"></i></button></td> -->
+        <td>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#centreed-modal-student" (click)="setStudent(student)">
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal fade" id="centreed-modal-student" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Studet information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- first row -->
+          <div class="row">
+            <!-- last name -->
+            <div class="mb-2 col">
+              <label for="last-name" class="form-label">Last name</label>
+              <input type="text" class="form-control" id="last-name" aria-label="Last name" aria-describedby="basic-addon1" [(ngModel)]="selectedStudent.lastname">
+            </div>
 
-<p class="m-5 p-5 w-auto">Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam inventore modi adipisci sit sunt ab qui excepturi necessitatibus! Nihil doloribus commodi nesciunt maxime, itaque dicta voluptatibus. Doloribus maiores provident harum.</p>
+            <!-- first name -->
+            <div class="mb-2 col">
+              <label for="first-name" class="form-label">First name</label>
+              <input type="text" class="form-control" id="first-name"  aria-label="First name" aria-describedby="basic-addon1" [(ngModel)]="selectedStudent.firstname">
+            </div>
+          </div>
+          <!-- second row -->
+          <div class="row">
+            <!-- room -->
+            <div class="mb-2 col">
+              <label for="room" class="form-label">Room</label>
+              <input type="text" class="form-control" id="room" aria-label="Room" aria-describedby="basic-addon1" [(ngModel)]="selectedStudent.room">
+            </div>
+            <!-- AM -->
+            <div class="mb-2 col">
+              <label for="am" class="form-label">AM</label>
+              <input type="text" class="form-control" id="am" aria-label="AM" aria-describedby="basic-addon1" [(ngModel)]="selectedStudent.am">
+            </div>
+          </div>
+          <!-- third row -->
+          <div class="row">
+            <!-- dateentryuniversity -->
+            <div class="mb-2 col">
+              <label for="dateentryuniversity" class="form-label">Date University</label>
+              <input type="date" class="form-control" id="dateentryuniversity" aria-label="Date registration University" aria-describedby="basic-addon1" [(ngModel)]="selectedStudent.dateuniversity">
+            </div>
+            <!-- dateentrydorm -->
+            <div class="mb-2 col">
+              <label for="dateentrydorm" class="form-label">Date Dorm</label>
+              <input type="date" class="form-control" id="dateentrydorm" aria-label="Date enter in dorm" aria-describedby="basic-addon1" [(ngModel)]="selectedStudent.datedorm">
+            </div>
+          </div>
+          <!-- university -->
+          <div class="mb-2 col">
+            <label for="university" class="form-label">University</label>
+            <input type="text" class="form-control"  id="university" aria-label="University" aria-describedby="basic-addon1" [(ngModel)]="selectedStudent.university">
+          </div>
+          <!-- email -->
+          <div class="mb-2 col">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control"  id="email" aria-label="Email" aria-describedby="basic-addon1" [(ngModel)]="selectedStudent.email">
+          </div>
+          <!-- phone -->
+          <div class="mb-2 col">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="phone" aria-label="Phone" aria-describedby="basic-addon1" [(ngModel)] = "selectedStudent.phone" >
+          </div>
+          <!-- comments -->
+          <div class="mb-2 col">
+            <label for="comments" class="form-label">Comments</label>
+            <!-- <input type="text" class="form-control" id="comments" aria-label="Last name" aria-describedby="basic-addon1" value={{selectedStudent.comments}}> -->
+            <textarea class="form-control" placeholder="Write comments for student here" id="comments" value={{selectedStudent.comments}}></textarea>
+          </div>
 
-
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="onSave()">Save</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="onDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

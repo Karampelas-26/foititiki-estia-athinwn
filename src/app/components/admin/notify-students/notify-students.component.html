@@ -1,0 +1,46 @@
+<div class="container mt-5 w-75">
+
+  <form>
+
+    <div class="col mb-3">
+      <label for="input-subject" class="form-label">Subject:</label>
+      <input type="text" class="form-control" id="input-subject">
+    </div>
+    <div class="row">
+
+      <div class="col-8 mb-3">
+        <label for="input-subject" class="form-label">Rooms: </label>
+        <input type="text" class="form-control" id="input-subject">
+      </div>
+
+      <div class="col-4">
+        <label for="input-first-name" class="form-label">University</label>
+        <select class="form-select" aria-label="Default select example">
+          <option selected>--Select floor</option>
+          <option value="1">First floor</option>
+          <option value="2">Second floor</option>
+          <option value="3">Third floor</option>
+          <option value="4">Fourth floor</option>
+          <option value="5">Fifth floor</option>
+          <option value="6">Sixth floor</option>
+          <option value="6">Seventh floor</option>
+          <option value="6">Eighth floor</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="col">
+      <label for="input-first-name" class="form-label">Message:</label>
+      <textarea class="form-control" placeholder="Comments for student" id="floatingTextarea" style="height: 25vh;"></textarea>
+    </div>
+
+    <div class="cointainer d-flex justify-content-end pt-3">
+      <button type="button" class="btn btn-primary me-3" (click)="onNotify()">Send notification</button>
+      <button type="button" class="btn btn-primary" (click)="onEmail()">Send email</button>
+    </div>
+
+  </form>
+
+
+</div>

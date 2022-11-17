@@ -1,7 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { TokenManagerService } from 'src/app/services/token-manager.service';
+import { UsersService } from 'src/app/services/users.service';
+// import { DashboardComponent } from '../admin/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-sign-in',
@@ -10,26 +11,42 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent implements OnInit {
 
-  username: string = '';
-  password: string = '';
+  username: string = 'admin';
+  password: string = '1234';
+  text: any;
 
-  constructor(private router: Router, private http: HttpClient) { }
-
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type':  'application/json',
-      "Access-Control-Allow-Origin": "*",
-
-    } ),responseType: 'text' as 'json'
-  };
+  constructor(
+    private router: Router,
+    private userService: UsersService,
+    private tokenManager: TokenManagerService
+  ) { }
 
   ngOnInit(): void {
-    this.a()
-
+    if (this.tokenManager.isTokenExist()) {
+      this.redirectToMainPage();
+    }
   }
 
-  a() {
-    this.http.get('http://localhost:3000/', this.httpOptions).subscribe(data => {console.log(data)})
+  onSignIn() {
+    this.userService.signIn(this.username, this.password).subscribe((response) => {
+      this.tokenManager.setToken(Object(response).token);
+      this.tokenManager.setUserRole(Object(response).role);
+      this.redirectToMainPage()
+    });
+  }
+
+  redirectToMainPage() {
+
+    this.tokenManager.setTokenAndRoleAsObservables()
+
+    const role = this.tokenManager.getUserRole();
+    if(role == 'ROLE_USER'){
+      this.router.navigate(['/main-page-student']);
+    }
+    if(role == 'ROLE_ADMIN'){
+      this.router.navigate(['/main-page-admin']);
+    }
+
   }
 
 }

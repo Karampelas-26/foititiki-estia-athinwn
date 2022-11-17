@@ -1,0 +1,75 @@
+<div class="container p-4">
+  <form #addStudent="ngForm" (ngSubmit)="onSubmit(addStudent)">
+    <div class="row my-3">
+      <div class="col-6">
+        <label for="input-first-name" class="form-label">First name</label>
+        <input #name="ngModel" required type="text" class="form-control" id="input-first-name" name="firstname" ngModel>
+        <div *ngIf="name.touched && name.invalid" class="text-danger pt-1">First name is required</div>
+      </div>
+      <div class="col-6">
+        <label for="input-last-name" class="form-label">Last name</label>
+        <input required type="text" class="form-control" id="input-last-name" name="lastname" ngModel>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-6">
+        <label for="input-email" class="form-label">Email</label>
+        <input required type="text" class="form-control" id="input-email" name="email" ngModel>
+      </div>
+      <div class="col-6">
+        <label for="input-phone" class="form-label">Phone</label>
+        <input required type="text" class="form-control" id="input-phone" name="phone" ngmodel>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-6">
+        <label for="input-first-name" class="form-label">University</label>
+        <select required class="form-select" aria-label="Default select example" name="university" ngModel>
+          <option selected>--Choose University</option>
+          <option value="1">Athens University of Economics and Business</option>
+          <option value="2">Agricultural University of Athens </option>
+          <option value="3">Athens School of Fine Arts</option>
+          <option value="4">University of Piraeus</option>
+          <option value="5">University of West Attica</option>
+          <option value="6">Panteion University</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="input-am" class="form-label">AM</label>
+        <input required type="text" class="form-control" id="input-am" name="am" ngModel>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-2">
+        <label for="input-room" class="form-label">Room</label>
+        <input required type="text" class="form-control" id="input-room" name="room" ngModel>
+      </div>
+      <div class="col-md-5">
+        <label for="input-date-university" class="form-label">Date Registration on University</label>
+        <input required type="date" class="form-control" id="input-date-university" name="dateuniversity" ngModel>
+      </div>
+      <div class="col-md-5">
+        <label for="input-date-dorm" class="form-label">Date entered dorms</label>
+        <input required type="date" class="form-control" id="input-date-dorm" name="datedorm" ngModel>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col">
+        <label for="input-first-name" class="form-label">Comments</label>
+        <textarea class="form-control" placeholder="Comments for student" id="floatingTextarea" name="comments" ngModel></textarea>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary me-3">Add student</button>
+    <button type="submit" class="btn btn-outline-secondary">Cancel</button>
+  </form>
+
+  <div class="container my-3 w-50 p-0">
+
+    <p>Or upload csv file, to insert more than one students together. Notice that fields must have the correct values as the form bellow.</p>
+    <div class="input-group">
+      <input type="file" class="form-control" id="input-file" aria-describedby="inputGroupFileAddon04" aria-label="Upload" (change)="fileChange($event)" placeholder="Upload file" accept=".csv">
+      <button class="btn btn-primary" type="submit" id="input-file" (click)="onUpload()">Upload</button>
+    </div>
+  </div>
+
+</div>

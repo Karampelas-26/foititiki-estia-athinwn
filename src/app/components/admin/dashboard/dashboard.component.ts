@@ -1,6 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { Student } from 'src/app/model/student';
 import { StudentsService } from 'src/app/services/admin/students.service';
 
@@ -10,19 +11,12 @@ interface StudentSearchOptions {
   viewValue: string
 }
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
-  })
-}
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
 
   optionsSerach: StudentSearchOptions[] = [
     {value: 'studentId', viewValue: 'Student ID'},
@@ -31,40 +25,86 @@ export class DashboardComponent implements OnInit {
     {value: 'lastname', viewValue: 'Last name'},
     {value: 'firstname', viewValue: 'First name'},
     {value: 'university', viewValue: 'University'},
-    {value: 'dateRegistrationUniversity', viewValue: 'Date Registration University'},
-    {value: 'dateRegistrationDorm', viewValue: 'Date Registration Dorm'},
-    {value: 'phone', viewValue: 'Phone'},
+    // {value: 'dateRegistrationUniversity', viewValue: 'Date Registration University'},
+    // {value: 'dateRegistrationDorm', viewValue: 'Date Registration Dorm'},
     {value: 'email', viewValue: 'Email'},
+    {value: 'phone', viewValue: 'Phone'},
   ]
 
-  students: any = [];
+  students: Student[] = [];
+  page: number = 0;
+  pageSize: number = 38;
 
-  constructor(private studentService: StudentsService, private http:HttpClient ) { }
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject<void>();
+  data = {
+    name: 'hi', value: 'world'
+  }
+  selectedStudent: Student = {
+    id: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    room: 0,
+    university: '',
+    phone: '',
+    am: '',
+    dateuniversity: '',
+    datedorm: '',
+    comments: ''
+  };
+
+  constructor(
+    private studentService: StudentsService,
+    private router: Router,
+    public datepipe: DatePipe
+  ) { }
 
   ngOnInit() {
-    // this.studentService.getStudents().subscribe((data) => {
-    //   this.students = data.students;
-    // })
-    // console.log(this.students)
-    // this.http.get<any>('lcoalhost:3000/dashboard').subscribe(data => {
-    //   this.students = data;
-    // })
-
-    // console.log(this.students)
-
-    // this.studentService.getStudents().subscribe( (data) => {
-    //   this.students = data
-    // });
-    // // console.log(this.students);
-    // this.studentService.getData().subscribe(data => console.log(data))
-    // this.getser()
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 38
+    };
+    this.studentService.getStudents().subscribe((data) => {
+      this.students = data;
+      this.dtTrigger.next();
+    })
   }
 
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
 
-  // getser() {
-  //   this.http.get('localhost:3000/dashboard/test1', {responseType: 'json'} ).subscribe(data => console.log(data))
-  // }
+  studentProfile(student: Student) {
+    this.studentService.setStudent(student);
+    this.router.navigate([`/dashboard/profile/${student.id}`])
+  }
 
+  setStudent(student: Student) {
+    console.log(student)
+    const dateDorm = student.datedorm;
+    const dateUni = student.dateuniversity;
 
+    console.log(student.datedorm);
 
+    const strDateDorm = this.datepipe.transform(new Date(dateDorm), 'YYYY-MM-dd');
+    const strDateUni = this.datepipe.transform(new Date(dateUni), 'YYYY-MM-dd');
+    this.selectedStudent = student;
+    console.log(this.selectedStudent);
+
+    this.selectedStudent.datedorm = strDateDorm as string;
+    this.selectedStudent.dateuniversity = strDateUni as string;
+  }
+
+  onSave() {
+    this.studentService.updateStudent(this.selectedStudent).subscribe();
+  }
+
+  onDelete() {
+    const index = this.students.indexOf(this.selectedStudent)
+    if (index !== -1) {
+      this.students.splice(index, 1);
+    }
+    this.studentService.deleteStudent(this.selectedStudent.id).subscribe()
+  }
 }

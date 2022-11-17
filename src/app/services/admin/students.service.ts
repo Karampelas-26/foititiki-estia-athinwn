@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders } from "@angular/common/http";
 import { Student } from 'src/app/model/student';
+import { BehaviorSubject } from 'rxjs'
+import { Token } from '@angular/compiler';
+import { TokenManagerService } from '../token-manager.service';
+
 
 
 @Injectable({
@@ -9,42 +12,61 @@ import { Student } from 'src/app/model/student';
 })
 export class StudentsService {
 
-  httpHeaders = {
-    headers:
-      new HttpHeaders(
-        {
-          'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-        }
-        )
+  httpHeader = new HttpHeaders();
+
+  serverUrl = 'http://localhost:3000/dashboard/';
+
+  private student$ = new BehaviorSubject<any>({});
+  selectedStudent$ = this.student$.asObservable();
+
+  constructor(
+    private http: HttpClient,
+    private tokenManager: TokenManagerService
+  ) { }
+
+
+
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.tokenManager.getToken()}`,
+    })
+  }
+
+  httpOptionsForFile = {
+    headers: new HttpHeaders({
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `Bearer ${this.tokenManager.getToken()}`,
+    })
+  }
+
+  getStudents() {
+    return this.http.get<Student[]>(this.serverUrl, this.httpOptions);
+  }
+
+  deleteStudent(id: string) {
+    return this.http.delete(`${this.serverUrl}${id}`, this.httpOptions);
+  }
+
+  createStudent(student: Student) {
+    return this.http.post(this.serverUrl, student, this.httpOptions)
+  }
+
+  uploadCSV(file: File) {
+    console.log(`${this.serverUrl}file`);
+    console.log(file);
+
+    return this.http.post(`${this.serverUrl}file`, file, this.httpOptionsForFile)
+  }
+
+  updateStudent(student: Student) {
+    return this.http.put<Student>(this.serverUrl, student, this.httpOptions)
   }
 
 
-  headers = new HttpHeaders();
+  setStudent(student: Student) {
+    this.student$.next(student);
+  }
 
-  constructor(private http: HttpClient) { }
 
-  // apiUrl = 'localhost:3000/dashboard/'
-
-  // getStudents(): Observable<Student[]>{
-  //   return this.http.get<Student[]>(this.apiUrl, this.httpHeaders)
-  // }
-
-  // getMessage(): Observable<any> {
-  //   return this.http.get('localhost:3000/dashboard/');
-  // }
-
-  // getData(): Observable<any> {
-  //   return from(
-  //     fetch(
-  //       'http://localhost:3000/dashboard/', // the url you are trying to access
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         method: 'GET', // GET, POST, PUT, DELETE
-  //         mode: 'no-cors' // the most important option
-  //       }
-  //     ));
-  // }
 }
